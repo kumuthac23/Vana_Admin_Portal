@@ -49,16 +49,16 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        height: "70vh",
       }}
     >
       <Box>
-        <Typography variant="h5" align="center" my={2}>
+        <Typography variant="h6" align="center" my={2}>
           <b>Login</b>
         </Typography>
         <form onSubmit={handleSubmit(handleLogin)}>
           <Box>
-            <Typography sx={{ fontWeight: 600, opacity: 0.7 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, opacity: 0.7 }}>
               PhoneNumber<span style={{ color: "red" }}>*</span>
             </Typography>
             <TextField
@@ -76,7 +76,7 @@ const Login = () => {
           </Box>
 
           <Box>
-            <Typography sx={{ fontWeight: 600, opacity: 0.7 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, opacity: 0.7 }}>
               Password<span style={{ color: "red" }}>*</span>
             </Typography>
             <TextField

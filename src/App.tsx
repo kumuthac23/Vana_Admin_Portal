@@ -14,10 +14,12 @@ function App() {
       <Router>
         <Layout />
         <Routes>
-          <Route path={paths.LOGIN} element={<Login />} />
-          <Route path={paths.PRODUCT} element={<Product />} />
-          <Route path={paths.ORDER} element={<Order />} />
-          <Route path={paths.CATEGORY} element={<Category />} />
+          <Route path={paths.ROOT} element={<Layout />}>
+            <Route path={paths.LOGIN} element={<Login />} />
+            <Route path={paths.PRODUCT} element={<Product />} />
+            <Route path={paths.ORDER} element={<Order />} />
+            <Route path={paths.CATEGORY} element={<Category />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>
