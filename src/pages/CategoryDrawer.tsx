@@ -49,7 +49,7 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
     setValue("name", selectedCategory?.name || "");
     setValue("description", selectedCategory?.description || "");
     setValue("image", selectedCategory?.image || "");
-  }, [selectedCategory, setValue]);
+  }, [selectedCategory]);
 
   const onSubmit: SubmitHandler<ICategory> = async (categoryFormData) => {
     const formData = new FormData();
@@ -129,8 +129,8 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
 
             <TextField
               fullWidth
-              minRows={4}
-              type="text"
+              multiline
+              rows={4} // Set the number of visible rows
               label="Description"
               error={!!errors.description}
               helperText={errors.description?.message}
