@@ -22,6 +22,7 @@ import {
 import CategoryDrawer from "./CategoryDrawer";
 import CategoryDialogBox from "./CategoryDialogBox";
 import Loader from "../common/Loader";
+import CategoryDrawerNew from "./CategoryDrawerNew";
 
 export const newCategory: ICategory = {
   _id: "",
@@ -41,7 +42,7 @@ const Category = () => {
   const [deleteConfirmation, setDeleteConfirmation] =
     useState<ICategory | null>(null);
 
-  const { data: CategoryData, isLoading, isFetching } = useGetAllCategory();
+  const { data: CategoryData, isLoading, isFetching,refetch } = useGetAllCategory();
 
   const Categorys = CategoryData || [];
 
@@ -53,6 +54,7 @@ const Category = () => {
   const handleCategoryAddClick = () => {
     setSelectedCategory(newCategory);
     setIsDrawerOpen(true);
+    refetch()
   };
 
   const handleCategoryDeleteClick = (category: ICategory) => {
@@ -157,7 +159,7 @@ const Category = () => {
             />
           )}
           {isDrawerOpen && (
-            <CategoryDrawer
+            <CategoryDrawerNew
               isDrawerOpen={isDrawerOpen}
               handleDrawerClose={() => setIsDrawerOpen(false)}
               selectedCategory={selectedCategory}

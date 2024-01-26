@@ -34,6 +34,7 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [image, setImage] = useState<File>();
 
   const {
     register,
@@ -56,9 +57,7 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
     formData.append("name", categoryFormData.name);
     formData.append("description", categoryFormData.description);
 
-    if (categoryFormData.image) {
-      formData.append("image", categoryFormData.image);
-    }
+    formData.append("image", image as File);
 
     if (selectedCategory) {
       if (selectedCategory._id) {
@@ -81,24 +80,19 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
     handleDrawerClose();
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files && event.target.files[0];
-
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+    const fileInput = event.target;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      setImage(file);
+      const filereader = new FileReader();
+      filereader.onload = (event) => {
+        if (event.target) {
+          setImagePreview(event.target.result as string);
+        }
       };
-      reader.readAsDataURL(selectedFile);
-
-      const blob = new Blob([selectedFile], { type: selectedFile.type });
-      const file = new File([blob], selectedFile.name, {
-        type: selectedFile.type,
-      });
-
-      setValue("image", file);
+      filereader.readAsDataURL(file);
+      console.log(file);
     }
-
-    event.target.value = "";
   };
 
   const handleButtonClick = () => {
@@ -129,8 +123,8 @@ const CategoryDrawer: React.FC<CategoryDrawerProps> = ({
 
             <TextField
               fullWidth
-              multiline
-              rows={4} // Set the number of visible rows
+              // multiline
+              // rows={4} // Set the number of visible rows
               label="Description"
               error={!!errors.description}
               helperText={errors.description?.message}
