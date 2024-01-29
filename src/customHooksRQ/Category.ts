@@ -48,3 +48,4 @@ export const useDeleteCategoryMutation = () => {
     });
     return deleteCategoryMutation;
 };
+

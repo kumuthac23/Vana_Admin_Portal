@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { DialogProps } from "../interface/type";
 
-function CategoryDialogBox({
+function DeleteConfirmationDialogBox({
   deleteDialogConfirmationOpen,
   handleDeleteCancel,
   handleDeleteClickConfirm,
@@ -33,4 +33,4 @@ function CategoryDialogBox({
   );
 }
 
-export default CategoryDialogBox;
+export default DeleteConfirmationDialogBox;

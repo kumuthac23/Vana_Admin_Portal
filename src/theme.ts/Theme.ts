@@ -47,5 +47,19 @@ export const theme = createTheme({
                 }
             }
         },
+        MuiTypography: {
+            styleOverrides: {
+                h1: {
+                    color: "#333",
+                    fontSize: "2rem",
+                    fontWeight: "500"
+                },
+                h2: {
+                    color: "#555",
+                    fontSize: "1.5rem",
+                    fontWeight: "400"
+                },
+            }
+        }
     }
 });

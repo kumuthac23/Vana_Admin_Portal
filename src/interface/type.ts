@@ -14,6 +14,16 @@ export type CategoryDrawerProps = {
     handleDrawerClose: () => void;
 }
 
+export type IProduct = {
+    _id?: string,
+    title: string,
+    images: string[],
+    price: number,
+    description: string,
+    netWeight: number,
+    posterURL: string,
+    JewelleryCollection: string[]
+}
 export type DialogProps = {
     deleteDialogConfirmationOpen: boolean;
     handleDeleteCancel: () => void;

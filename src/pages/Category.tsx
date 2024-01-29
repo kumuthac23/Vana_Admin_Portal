@@ -19,10 +19,9 @@ import {
   useDeleteCategoryMutation,
   useGetAllCategory,
 } from "../customHooksRQ/Category";
-import CategoryDrawer from "./CategoryDrawer";
-import CategoryDialogBox from "./CategoryDialogBox";
+import CategoryDrawer from "../drawer/CategoryDrawer";
 import Loader from "../common/Loader";
-import CategoryDrawerNew from "./CategoryDrawerNew";
+import DeleteConfirmationDialogBox from "../common/DeleteConfirmationDialogBox";
 
 export const newCategory: ICategory = {
   _id: "",
@@ -42,7 +41,12 @@ const Category = () => {
   const [deleteConfirmation, setDeleteConfirmation] =
     useState<ICategory | null>(null);
 
-  const { data: CategoryData, isLoading, isFetching,refetch } = useGetAllCategory();
+  const {
+    data: CategoryData,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetAllCategory();
 
   const Categorys = CategoryData || [];
 
@@ -54,7 +58,7 @@ const Category = () => {
   const handleCategoryAddClick = () => {
     setSelectedCategory(newCategory);
     setIsDrawerOpen(true);
-    refetch()
+    refetch();
   };
 
   const handleCategoryDeleteClick = (category: ICategory) => {
@@ -152,14 +156,14 @@ const Category = () => {
             </TableContainer>
           </Container>
           {deleteDialogConfirmationOpen && (
-            <CategoryDialogBox
+            <DeleteConfirmationDialogBox
               deleteDialogConfirmationOpen={deleteDialogConfirmationOpen}
               handleDeleteCancel={handleDeleteCancel}
               handleDeleteClickConfirm={handleDeleteConfirmClick}
             />
           )}
           {isDrawerOpen && (
-            <CategoryDrawerNew
+            <CategoryDrawer
               isDrawerOpen={isDrawerOpen}
               handleDrawerClose={() => setIsDrawerOpen(false)}
               selectedCategory={selectedCategory}

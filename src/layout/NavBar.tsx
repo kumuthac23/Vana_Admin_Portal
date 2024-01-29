@@ -23,7 +23,7 @@ import { paths } from "../routes/path";
 const menuItems = [
   { text: "Orders", icon: <AddShoppingCartIcon />, path: `${paths.ORDER}` },
   { text: "Products", icon: <StoreIcon />, path: `${paths.PRODUCT}` },
-  { text: "Category", icon: <CategoryIcon />, path: `${paths.CATEGORY}` },
+  { text: "Collections", icon: <CategoryIcon />, path: `${paths.CATEGORY}` },
 ];
 
 const NavBar = () => {
@@ -59,7 +59,7 @@ const NavBar = () => {
             sx={{ marginRight: 2 }}
           />
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Your Company Name
+            VANA
           </Typography>
           <IconButton color="inherit">
             <AccountCircleIcon />
@@ -100,6 +100,7 @@ const NavBar = () => {
               onClick={() => handlePageNavigate(item.path)}
               sx={{
                 cursor: "pointer",
+                gapX: 0,
                 "&:hover": {
                   backgroundColor: "#e0e0e0",
                 },

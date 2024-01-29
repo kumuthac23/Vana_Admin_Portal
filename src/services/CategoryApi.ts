@@ -3,7 +3,7 @@ import { http } from "./http";
 
 export const getAllCategory = async () => {
     try {
-        const response = await http.get<ICategory[]>("category/getAllCategory");
+        const response = await http.get<ICategory[]>("JewelleryCollection/getJewelleryCollection");
         return response.data;
     } catch (error) { throw error }
 };
@@ -13,7 +13,7 @@ export const createCategory = async (newCategory: ICategory) => {
 
     try {
         const response = await http.post<ICategory>(
-            "category/createCategory",
+            "JewelleryCollection/validateAndCreateJewelleryCollection",
             newCategory
         );
         if (response.data && response.data._id) {
@@ -29,7 +29,7 @@ export const createCategory = async (newCategory: ICategory) => {
 export const updateCategory = async (updatedCategory: ICategory) => {
     console.log("api update", updatedCategory);
 
-    const updateApi = `category/updateCategory/${updatedCategory._id}`;
+    const updateApi = `JewelleryCollection/updateJewelleryCollection/${updatedCategory._id}`;
     try {
         const response = await http.put(updateApi, updatedCategory);
         console.log(response);
@@ -47,7 +47,7 @@ export const updateCategory = async (updatedCategory: ICategory) => {
 };
 
 export const deleteCategory = async (id: string) => {
-    const deleteApi = `category/deleteCategory/${id}`;
+    const deleteApi = `JewelleryCollection/deleteJewelleryCollection/${id}`;
     try {
         await http.delete(deleteApi);
         console.log("Category deleted successfully");
