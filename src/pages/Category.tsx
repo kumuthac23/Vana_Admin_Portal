@@ -90,13 +90,16 @@ const Category = () => {
         <>
           <Container>
             <Box display="flex" justifyContent="space-between">
-              <Typography variant="h6">Categories</Typography>
+              <Box display={"flex"} alignItems={"center"} columnGap={1}>
+                <Typography variant="h6">Collections</Typography>
+                <Typography>({Categorys.length})</Typography>
+              </Box>
               <Button
                 variant="contained"
-                sx={{ textTransform: "none" }}
+                sx={{ textTransform: "none", color: "white" }}
                 onClick={handleCategoryAddClick}
               >
-                + Add Category
+                + Add Collection
               </Button>
             </Box>
             <TableContainer
@@ -111,16 +114,19 @@ const Category = () => {
                 <TableHead
                   sx={{
                     position: "sticky",
-                    top: 0,
+                    top: "0",
+                    // mx: 0,
                     zIndex: 1,
-                    backgroundColor: "ButtonFace",
+                    backgroundColor: "wheat",
                   }}
                 >
                   <TableRow>
-                    <TableCell align="center">IMAGE</TableCell>
-                    <TableCell align="center">NAME</TableCell>
-                    <TableCell align="center">DESCRIPTION</TableCell>
-                    <TableCell align="center">ACTIONS</TableCell>
+                    <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Name</TableCell>
+                    <TableCell align="center" sx={{ width: 600 }}>
+                      Description
+                    </TableCell>
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

@@ -1,23 +1,24 @@
-import { blue, green, orange, purple, red, teal } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
     palette: {
-        primary: purple,
-        secondary: orange,
-        success: teal,
-        info: blue,
-        warning: green,
-        error: red,
+        primary: {
+            main: "#bd8d67"
+        },
+        secondary: {
+            main: "#e7d0b1"
+        },
+
     },
     components: {
         MuiTableHead: {
             styleOverrides: {
                 root: {
-                    backgroundColor: "teal",
-                    color: "white"
-                }
-            }
+                    '& .MuiTableCell-root': {
+                        fontWeight: 'bold',
+                    },
+                },
+            },
         },
         MuiTableBody: {
             styleOverrides: {
@@ -43,22 +44,22 @@ export const theme = createTheme({
         MuiDrawer: {
             styleOverrides: {
                 paper: {
-                    color: purple[500], // Use the primary color from your palette
-                }
+                    color: "#bd8d67",
+                },
+
             }
         },
-        MuiTypography: {
+        MuiButton: {
             styleOverrides: {
-                h1: {
-                    color: "#333",
-                    fontSize: "2rem",
-                    fontWeight: "500"
+                root: {
+                    fontWeight: "500",
+                    textDecorationColor: "white",
                 },
-                h2: {
-                    color: "#555",
-                    fontSize: "1.5rem",
-                    fontWeight: "400"
-                },
+            },
+        },
+        MuiIcon: {
+            styleOverrides: {
+                root: { color: "#bd8d67" }
             }
         }
     }

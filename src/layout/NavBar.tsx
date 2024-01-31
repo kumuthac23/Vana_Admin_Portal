@@ -20,6 +20,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import StoreIcon from "@mui/icons-material/Store";
 import { useNavigate } from "react-router";
 import { paths } from "../routes/path";
+import vanaLogo from "../assets/JEWELLERY BY VAVA LOGO.png";
 const menuItems = [
   { text: "Orders", icon: <AddShoppingCartIcon />, path: `${paths.ORDER}` },
   { text: "Products", icon: <StoreIcon />, path: `${paths.PRODUCT}` },
@@ -55,8 +56,13 @@ const NavBar = () => {
           </IconButton>
           <Avatar
             alt="Company Logo"
-            src="/path-to-your-logo.jpg"
-            sx={{ marginRight: 2 }}
+            src={vanaLogo}
+            sx={{
+              marginRight: 2,
+              backgroundColor: "#F6F6F6",
+              height: "45px",
+              width: "45px",
+            }}
           />
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             VANA
@@ -87,9 +93,9 @@ const NavBar = () => {
             paddingX: 2,
           }}
         >
-          <Typography variant="h6">Company</Typography>
+          <Typography variant="h6">VANA Jewellery</Typography>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            <ChevronLeftIcon sx={{ color: "#bd8d67" }} />
           </IconButton>
         </Box>
 
@@ -100,13 +106,18 @@ const NavBar = () => {
               onClick={() => handlePageNavigate(item.path)}
               sx={{
                 cursor: "pointer",
-                gapX: 0,
                 "&:hover": {
                   backgroundColor: "#e0e0e0",
                 },
               }}
             >
-              {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+              {item.icon && (
+                <ListItemIcon
+                  sx={{ minWidth: 40, marginRight: -1, color: "#bd8d67" }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+              )}
               <ListItemText primary={item.text} />
             </ListItem>
           ))}

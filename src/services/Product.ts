@@ -56,9 +56,13 @@ export const deleteProduct = async (id: string) => {
     }
 };
 
-export const FetchJewelleryItemByJewelleryCollection = async (updatedProduct: IProduct) => {
+export const FetchJewelleryItemByJewelleryCollection = async (updatedProduct: string) => {
     try {
-        const response = await http.get<IProduct[]>(`JewelleryItem/fetchJewelleryItemsByJewelleryCollectionId/:${updatedProduct._id}`);
+        console.log(updatedProduct);
+
+        const response = await http.get<IProduct[]>(`JewelleryItem/fetchJewelleryItemsByJewelleryCollectionId/${updatedProduct}`);
+        console.log(response.data);
+
         return response.data;
     } catch (error) { throw error }
 }

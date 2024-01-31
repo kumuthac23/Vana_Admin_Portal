@@ -13,6 +13,11 @@ export type CategoryDrawerProps = {
     selectedCategory: ICategory | null;
     handleDrawerClose: () => void;
 }
+export type JewelleryItemDrawerProps = {
+    isDrawerOpen: boolean;
+    selectedJewelleryITem: IProduct | null;
+    handleDrawerClose: () => void;
+}
 
 export type IProduct = {
     _id?: string,
@@ -22,8 +27,9 @@ export type IProduct = {
     description: string,
     netWeight: number,
     posterURL: string,
-    JewelleryCollection: string[]
+    JewelleryCollection: ICategory[]
 }
+
 export type DialogProps = {
     deleteDialogConfirmationOpen: boolean;
     handleDeleteCancel: () => void;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,16 +11,23 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  SelectChangeEvent,
+  InputAdornment,
+  OutlinedInput,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IProduct } from "../interface/type"; // Import the IProduct interface
-import {
-  useDeleteProductMutation,
-  useGetAllProducts,
-} from "../customHooksRQ/Product"; // Import your custom hooks for product operations
+import { IProduct } from "../interface/type";
+import { useDeleteProductMutation } from "../customHooksRQ/Product";
+import { FetchJewelleryItemByJewelleryCollection } from "../services/Product";
 import DeleteConfirmationDialogBox from "../common/DeleteConfirmationDialogBox";
 import Loader from "../common/Loader";
+import { useGetAllCategory } from "../customHooksRQ/Category";
+import JewelleryItem from "../drawer/JewelleryItem";
 
 const newProduct: IProduct = {
   title: "",
@@ -41,15 +48,66 @@ const Product = () => {
   const [deleteConfirmation, setDeleteConfirmation] = useState<IProduct | null>(
     null
   );
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(
+    null
+  );
+  const [searchText, setSearchText] = useState<string>("");
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   const {
-    data: productData,
+    data: CollectionData,
     isLoading,
     isFetching,
     refetch,
-  } = useGetAllProducts();
+  } = useGetAllCategory();
 
-  const products = productData || [];
+  const collections = CollectionData || [];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoadingProducts(true);
+        const updatedProduct: IProduct = {
+          _id: "", // Set the appropriate _id for the selected product
+          title: "",
+          images: [],
+          price: 0,
+          description: "",
+          netWeight: 0,
+          posterURL: "",
+          JewelleryCollection: [], // Set the selected collection
+        };
+        console.log(selectedCollection);
+
+        if (selectedCollection) {
+          const result = await FetchJewelleryItemByJewelleryCollection(
+            selectedCollection
+          );
+          setFilteredProducts(result);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    if (selectedCollection) {
+      fetchData();
+    }
+  }, [selectedCollection]);
+  console.log(filteredProducts);
+
+  const handleCollectionChange = (
+    event: SelectChangeEvent<string>,
+    child: React.ReactNode
+  ) => {
+    const selectedValue = event.target.value;
+    console.log(selectedValue);
+
+    setSelectedCollection(selectedValue);
+  };
 
   const handleProductEditClick = (product: IProduct) => {
     setSelectedProduct(product);
@@ -83,85 +141,161 @@ const Product = () => {
     }
   };
 
+  const handleAddProductClick = () => {
+    setSelectedProduct(newProduct);
+    setIsDrawerOpen(true);
+    refetch();
+  };
+
+  const handleClearSearch = () => {
+    setSearchText("");
+    setFilteredProducts([]);
+    setSelectedCollection(null);
+  };
+
   return (
     <>
-      {isLoading || isFetching ? (
+      {isLoading || isFetching || loadingProducts ? (
         <Loader />
       ) : (
         <>
           <Container>
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="h6">Products</Typography>
-              <Button
-                variant="contained"
-                sx={{ textTransform: "none" }}
-                onClick={handleProductAddClick}
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              marginBottom={2}
+            >
+              <Box>
+                <Typography variant="h6">Products</Typography>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Button
+                  variant="contained"
+                  onClick={handleAddProductClick}
+                  sx={{ textTransform: "none" }}
+                >
+                  + Add Product
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <FormControl
+                sx={{
+                  marginRight: 2,
+                  width: "250px",
+                }}
               >
-                + Add Product
+                <Select
+                  value={selectedCollection || ""}
+                  onChange={handleCollectionChange}
+                  displayEmpty
+                  placeholder="Select Collection"
+                  size="small"
+                >
+                  <MenuItem value="" disabled>
+                    Select Collection
+                  </MenuItem>
+                  {collections.map((collection) => (
+                    <MenuItem key={collection._id} value={collection.name}>
+                      {collection.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Button
+                onClick={handleClearSearch}
+                variant="outlined"
+                size="small"
+                sx={{
+                  textTransform: "none",
+                  fontSize: "13px",
+                  fontWeight: "bolder",
+                  height: "38px",
+                  color: "#bd8d67",
+                }}
+              >
+                Clear search
               </Button>
             </Box>
             <TableContainer
               sx={{
-                boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                // boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                 marginTop: 3,
-                height: "450px",
                 position: "relative",
+                lineHeight: "none",
               }}
             >
               <Table>
                 <TableHead
                   sx={{
                     position: "sticky",
-                    top: 0,
                     zIndex: 1,
-                    backgroundColor: "ButtonFace",
+                    backgroundColor: "wheat",
+                    lineHeight: "none",
                   }}
                 >
                   <TableRow>
-                    <TableCell align="center">Images</TableCell>
                     <TableCell align="center">Title</TableCell>
-                    <TableCell align="center" sx={{ width: "500px" }}>
+                    <TableCell align="center">Images</TableCell>
+                    <TableCell align="center">Price</TableCell>
+                    <TableCell align="center" sx={{ width: 450 }}>
                       Description
                     </TableCell>
-                    <TableCell align="center">Price</TableCell>
-
                     <TableCell align="center">Net Weight</TableCell>
                     <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
-                  {products.map((product: IProduct, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell align="center">
-                        {product.images.map((image, i) => (
-                          <img
-                            key={i}
-                            src={image}
-                            alt={`Product ${index + 1} Image ${i + 1}`}
-                            style={{ width: "50px", marginRight: "5px" }}
-                          />
-                        ))}
-                      </TableCell>{" "}
-                      <TableCell align="center">{product.title}</TableCell>
-                      <TableCell align="center">
-                        {product.description}
-                      </TableCell>
-                      <TableCell align="center">{product.price}</TableCell>
-                      <TableCell align="center">{product.netWeight}</TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleProductEditClick(product)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleProductDeleteClick(product)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {filteredProducts &&
+                    filteredProducts.map((product, index) => (
+                      <TableRow key={index}>
+                        <TableCell align="center">
+                          {product.title || null}
+                        </TableCell>
+
+                        <TableCell align="center">
+                          {product.images &&
+                            product.images.map((image, i) => (
+                              <img
+                                key={i}
+                                src={image}
+                                alt={`Product ${index + 1} Image ${i + 1}`}
+                                style={{ marginRight: "5px" }}
+                              />
+                            ))}
+                        </TableCell>
+                        <TableCell align="center">
+                          {product.price || null}
+                        </TableCell>
+                        <TableCell align="center">
+                          {product.description || null}
+                        </TableCell>
+                        <TableCell align="center">
+                          {product.netWeight || null}
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton
+                            onClick={() => handleProductEditClick(product)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleProductDeleteClick(product)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -173,13 +307,13 @@ const Product = () => {
               handleDeleteClickConfirm={handleDeleteConfirmClick}
             />
           )}
-          {/* {isDrawerOpen && (
-            <ProductDrawer
+          {isDrawerOpen && (
+            <JewelleryItem
               isDrawerOpen={isDrawerOpen}
               handleDrawerClose={() => setIsDrawerOpen(false)}
-              selectedProduct={selectedProduct}
+              selectedJewelleryITem={selectedProduct}
             />
-          )} */}
+          )}
         </>
       )}
     </>

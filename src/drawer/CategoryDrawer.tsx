@@ -243,7 +243,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             <TextField
               id="outlined-multiline-flexible"
               variant="outlined"
-              multiline
+              // multiline
               minRows={5}
               fullWidth
               {...register("description")}
@@ -273,7 +273,12 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             <Typography variant="body1" fontWeight="bold">
               Category Image
             </Typography>
-            <Button variant="outlined" onClick={handleUploadButtonClick}>
+            <Button
+              variant="outlined"
+              onClick={handleUploadButtonClick}
+              sx={{ textTransform: "none" }}
+              size="small"
+            >
               <AddIcon />
               Upload Image
             </Button>
@@ -293,7 +298,6 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             />
 
             {selectedCategoryImage != null && selectedCategory ? (
-              // Display selected category image
               <img
                 src={
                   `http://localhost:3000/category/images/${selectedCategoryImage} ` ||
@@ -306,7 +310,6 @@ function CategoryDrawer(props: CategoryDrawerProps) {
                 alt="Selected Category Image"
               />
             ) : newCategoryImageFile != null ? (
-              // Display uploaded image
               <img
                 src={URL.createObjectURL(newCategoryImageFile)}
                 style={{
@@ -367,7 +370,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" sx={{ color: "white" }}>
               Save
             </Button>
           </Box>
