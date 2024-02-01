@@ -196,14 +196,23 @@ const Product = () => {
                   value={selectedCollection || ""}
                   onChange={handleCollectionChange}
                   displayEmpty
-                  placeholder="Select Collection"
                   size="small"
                 >
-                  <MenuItem value="" disabled>
+                  <MenuItem value="" sx={{ display: "none" }}>
                     Select Collection
                   </MenuItem>
+
                   {collections.map((collection) => (
-                    <MenuItem key={collection._id} value={collection.name}>
+                    <MenuItem
+                      key={collection._id}
+                      value={collection._id}
+                      sx={{
+                        color:
+                          selectedCollection === collection._id
+                            ? "#bd8d67"
+                            : "#333",
+                      }}
+                    >
                       {collection.name}
                     </MenuItem>
                   ))}
@@ -240,6 +249,7 @@ const Product = () => {
                     zIndex: 1,
                     backgroundColor: "wheat",
                     lineHeight: "none",
+                    height: selectedProduct ? "50px" : "auto",
                   }}
                 >
                   <TableRow>

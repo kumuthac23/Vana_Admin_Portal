@@ -104,20 +104,26 @@ const Category = () => {
             </Box>
             <TableContainer
               sx={{
-                boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                maxHeight: 600,
+                height: "100%",
                 marginTop: 3,
-                height: "450px",
                 position: "relative",
+                lineheight: "none",
+                overflowY: "auto",
               }}
             >
-              <Table>
+              <Table
+                sx={{
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1,
+                  tableLayout: "fixed",
+                }}
+              >
                 <TableHead
                   sx={{
-                    position: "sticky",
-                    top: "0",
-                    // mx: 0,
-                    zIndex: 1,
                     backgroundColor: "wheat",
+                    height: selectedCategory ? "50px" : "auto",
                   }}
                 >
                   <TableRow>

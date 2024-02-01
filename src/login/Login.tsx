@@ -13,6 +13,9 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ILogin } from "../interface/type";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
+import { useLogin } from "../customHooksRQ/User";
 
 const schema = yup.object().shape({
   phoneNumber: yup
@@ -24,6 +27,8 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     register,
@@ -33,10 +38,21 @@ const Login = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-
+  const loginMutation = useLogin();
   const handleLogin: SubmitHandler<ILogin> = (data: ILogin) => {
-    // Handle login logic here
     console.log(data);
+
+    if (data) {
+      loginMutation
+        .mutateAsync(data)
+        .then(() => {
+          navigate("/product");
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Invalid username and password");
+        });
+    }
   };
 
   const togglePasswordVisibility = () => {

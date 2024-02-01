@@ -8,6 +8,11 @@ export interface ICategory {
     description: string,
     image?: string
 }
+
+export interface IUser {
+    phoneNumber: string,
+    password: string
+}
 export type CategoryDrawerProps = {
     isDrawerOpen: boolean;
     selectedCategory: ICategory | null;

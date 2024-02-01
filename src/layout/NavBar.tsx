@@ -48,7 +48,7 @@ const NavBar = () => {
     <>
       <AppBar
         position="fixed"
-        sx={{ height: "50px", display: "flex", justifyContent: "center" }}
+        sx={{ height: "70px", display: "flex", justifyContent: "center" }}
       >
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={handleDrawerOpen}>
@@ -113,7 +113,7 @@ const NavBar = () => {
             >
               {item.icon && (
                 <ListItemIcon
-                  sx={{ minWidth: 40, marginRight: -1, color: "#bd8d67" }}
+                  sx={{ minWidth: 40, marginRight: 0, color: "#bd8d67" }}
                 >
                   {item.icon}
                 </ListItemIcon>

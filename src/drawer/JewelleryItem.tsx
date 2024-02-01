@@ -46,7 +46,7 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
     fetch("http://localhost:3000/JewelleryCollection/getJewelleryCollection")
       .then((response) => response.json())
       .then((data) => {
-        const collectionNames = data.map((collection: any) => ({
+        const collectionNames = data.map((collection: ICategory) => ({
           name: collection.name,
         }));
         setCollections(collectionNames);
@@ -83,30 +83,32 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
         },
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
-        Add Product
-      </Typography>
-      <IconButton
-        sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          color: "black",
-          "& .MuiSvgIcon-root": {
-            fontWeight: "bold",
-          },
-        }}
-        onClick={handleDrawerClose}
-      >
-        <Close sx={{ fontWeight: "bold" }} />
-      </IconButton>
-      <Divider sx={{ marginTop: 2 }} />
+      <Box sx={{ display: "flex", alignItems: "center", padding: "10px" }}>
+        <Typography variant="h4" sx={{ paddingLeft: "10px" }}>
+          Add Product
+        </Typography>
+        <IconButton
+          sx={{
+            marginLeft: "auto",
+            color: "black",
+            "& .MuiSvgIcon-root": {
+              fontWeight: "bold",
+            },
+          }}
+          onClick={handleDrawerClose}
+        >
+          <Close sx={{ fontWeight: "bold" }} />
+        </IconButton>
+      </Box>
+      <Divider />
 
-      <Box sx={{ padding: "10px" }}>
+      <Box sx={{ paddingTop: 1 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={5} marginTop={1}>
-            <Grid item xs={6}>
-              <Typography variant="h6">Title</Typography>
+          <Grid container spacing={5}>
+            <Grid item xs={6} style={{ paddingLeft: "80px" }}>
+              <Typography variant="h6" sx={{ marginTop: 1 }}>
+                Title
+              </Typography>
               <Controller
                 name="title"
                 control={control}
@@ -116,12 +118,15 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                     fullWidth
                     size="small"
                     margin="normal"
+                    sx={{ marginTop: 0 }}
                     error={!!errors.title}
                     helperText={errors.title?.message}
                   />
                 )}
               />
-              <Typography variant="h6">Description</Typography>
+              <Typography variant="h6" sx={{ marginTop: 1 }}>
+                Description
+              </Typography>
               <Controller
                 name="description"
                 control={control}
@@ -131,6 +136,7 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                     fullWidth
                     size="small"
                     margin="normal"
+                    sx={{ marginTop: 0 }}
                     error={!!errors.description}
                     helperText={errors.description?.message}
                     multiline
@@ -138,7 +144,9 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                   />
                 )}
               />
-              <Typography variant="h6">Collections</Typography>
+              <Typography variant="h6" sx={{ marginTop: 1 }}>
+                Collections
+              </Typography>
               <FormGroup>
                 {collections.map((collection, index) => (
                   <Card
@@ -163,8 +171,10 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                 ))}
               </FormGroup>
             </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h6">Price</Typography>
+            <Grid item xs={6} sx={{ paddingRight: "50px" }}>
+              <Typography variant="h6" sx={{ marginTop: 1 }}>
+                Price
+              </Typography>
               <Controller
                 name="price"
                 control={control}
@@ -175,12 +185,15 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                     fullWidth
                     size="small"
                     margin="normal"
+                    sx={{ marginTop: 0 }}
                     error={!!errors.price}
                     helperText={errors.price?.message}
                   />
                 )}
               />
-              <Typography variant="h6">Net Weight</Typography>
+              <Typography variant="h6" sx={{ marginTop: 1 }}>
+                Net Weight
+              </Typography>
               <Controller
                 name="netWeight"
                 control={control}
@@ -191,6 +204,7 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                     fullWidth
                     size="small"
                     margin="normal"
+                    sx={{ marginTop: 0 }}
                     error={!!errors.netWeight}
                     helperText={errors.netWeight?.message}
                   />
@@ -232,7 +246,7 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body1">Postal URL</Typography>
+                    <Typography variant="h6">Postal URL</Typography>
                     <Button
                       variant="outlined"
                       component="label"
