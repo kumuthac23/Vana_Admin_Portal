@@ -16,6 +16,7 @@ import { ILogin } from "../interface/type";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { useLogin } from "../customHooksRQ/User";
+import { paths } from "../routes/path";
 
 const schema = yup.object().shape({
   phoneNumber: yup
@@ -46,7 +47,7 @@ const Login = () => {
       loginMutation
         .mutateAsync(data)
         .then(() => {
-          navigate("/product");
+          navigate(`${paths.PRODUCT}`);
         })
         .catch((error) => {
           console.error(error);
