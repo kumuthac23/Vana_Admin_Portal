@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import Layout from "./layout/Layout";
+import Product from "./pages/Product";
+import Order from "./pages/Order";
+import Category from "./pages/Category";
+import { theme } from "./theme.ts/Theme";
+import Login from "./login/Login";
+import { paths } from "./routes/path";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
+import PrivateRoute from "./common/PrivateRoute";
+
+export const queryClient = new QueryClient();
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <QueryClientProvider client={queryClient}>
+      <Toaster />
+
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Layout />
+          <Routes>
+            <Route path={paths.ROOT} element={<Layout />}>
+              <Route path={paths.LOGIN} element={<Login />} />
+              <Route
+                path={paths.PRODUCT}
+                element={
+                  <PrivateRoute>
+                    <Product />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path={paths.ORDER}
+                element={
+                  <PrivateRoute>
+                    <Order />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path={paths.CATEGORY}
+                element={
+                  <PrivateRoute>
+                    <Category />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen buttonPosition="bottom-left" />
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;
