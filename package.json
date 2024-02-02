@@ -16,7 +16,6 @@
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.6",
     "@tanstack/react-query": "^5.13.4",
-    "@tanstack/react-query-devtools": "^5.13.5",
     "axios": "^1.6.5",
     "browser-image-compression": "^2.0.2",
     "env-cmd": "^10.1.0",
