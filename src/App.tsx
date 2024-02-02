@@ -54,7 +54,6 @@ function App() {
           </Routes>
         </Router>
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen buttonPosition="bottom-left" />
     </QueryClientProvider>
   );
 }

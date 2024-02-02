@@ -150,6 +150,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
           ...formData,
           name: data.name,
           description: data.description,
+          image:data.image 
         },
         {
           onSuccess: () => {
@@ -243,8 +244,8 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             <TextField
               id="outlined-multiline-flexible"
               variant="outlined"
-              // multiline
-              minRows={5}
+              multiline
+              rows={4}
               fullWidth
               {...register("description")}
               autoComplete="new"
@@ -271,7 +272,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             }}
           >
             <Typography variant="body1" fontWeight="bold">
-              Category Image
+              Collection Image
             </Typography>
             <Button
               variant="outlined"
