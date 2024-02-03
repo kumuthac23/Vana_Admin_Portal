@@ -67,7 +67,10 @@ const NavBar = () => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             VANA
           </Typography>
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={() => navigate(`${paths.LOGIN}`)}
+          >
             <AccountCircleIcon />
           </IconButton>
         </Toolbar>

@@ -24,6 +24,16 @@ import {
   IProduct,
   JewelleryItemDrawerProps,
 } from "../interface/type";
+import {
+  useCreateCategoryMutation,
+  useGetAllCategory,
+} from "../customHooksRQ/Category";
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} from "../customHooksRQ/Product";
+import { newProduct } from "../pages/Product";
+import toast from "react-hot-toast";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -40,30 +50,95 @@ const JewelleryItem: React.FC<JewelleryItemDrawerProps> = ({
   handleDrawerClose,
   selectedJewelleryITem,
 }) => {
+  const createProductMutation = useUpdateProductMutation();
+  const updateProductMutation = useCreateProductMutation();
   const [collections, setCollections] = useState<ICategory[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/JewelleryCollection/getJewelleryCollection")
-      .then((response) => response.json())
-      .then((data) => {
-        const collectionNames = data.map((collection: ICategory) => ({
-          name: collection.name,
-        }));
-        setCollections(collectionNames);
-      })
-      .catch((error) => console.error("Error fetching collections:", error));
+    const { data: collection } = useGetAllCategory();
+    setCollections(collection!);
   }, []);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IProduct>({
     resolver: yupResolver(schema) as any,
+    mode: "all",
+    defaultValues: newProduct,
   });
 
   const onSubmit = (data: IProduct) => {
-    console.log(data);
+    const formData = new FormData();
+
+    // Append images to the form data
+    if (data.images) {
+      data.images.forEach((image: string, index: number) => {
+        formData.append(`images[${index}]`, image);
+      });
+    }
+
+    // Append other form fields
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("netWeight", data.netWeight.toString());
+    formData.append("price", data.price.toString());
+    formData.append("posterURL", data.posterURL);
+
+    // Append JewelleryCollection IDs to the form data
+    if (data.JewelleryCollection) {
+      data.JewelleryCollection.forEach(
+        (collection: ICategory, index: number) => {
+          if (collection._id) {
+            formData.append(
+              `JewelleryCollection[${index}]._id`,
+              collection._id
+            );
+          }
+        }
+      );
+    }
+
+    const productData: IProduct = {
+      _id: data._id,
+      title: data.title,
+      description: data.description,
+      netWeight: data.netWeight,
+      price: data.price,
+      posterURL: data.posterURL,
+      images: data.images,
+      JewelleryCollection: data.JewelleryCollection,
+    };
+
+    if (!data._id) {
+      // Creating a new product
+      createProductMutation.mutate(productData, {
+        onSuccess: () => {
+          handleDrawerClose();
+          resetForm();
+        },
+        onError: () => {
+          toast.error("Error creating product");
+        },
+      });
+    } else {
+      // Updating an existing product
+      updateProductMutation.mutate(productData, {
+        onSuccess: () => {
+          handleDrawerClose();
+          resetForm();
+        },
+        onError: () => {
+          toast.error("Error updating product");
+        },
+      });
+    }
+  };
+
+  const resetForm = () => {
+    reset({ ...newProduct });
   };
 
   return (

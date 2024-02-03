@@ -29,7 +29,7 @@ import Loader from "../common/Loader";
 import { useGetAllCategory } from "../customHooksRQ/Category";
 import JewelleryItem from "../drawer/JewelleryItem";
 
-const newProduct: IProduct = {
+export const newProduct: IProduct = {
   title: "",
   images: [],
   price: 0,
@@ -144,7 +144,7 @@ const Product = () => {
   const handleAddProductClick = () => {
     setSelectedProduct(newProduct);
     setIsDrawerOpen(true);
-    refetch();
+    // refetch();
   };
 
   const handleClearSearch = () => {

@@ -81,6 +81,7 @@ const Category = () => {
       setdeleteDialogConfirmationOpen(false);
     }
   };
+  console.log(Categorys);
 
   return (
     <>
@@ -141,7 +142,7 @@ const Category = () => {
                       <TableCell align="center">
                         <img
                           width="50px"
-                          src={`http://localhost:3000/category/images/${category.image}`}
+                          src={category.image}
                           alt={`${category.name}`}
                         />
                       </TableCell>

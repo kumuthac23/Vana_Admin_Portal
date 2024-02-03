@@ -11,11 +11,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import imageCompression from "browser-image-compression";
-import { CategoryDrawerProps, ICategory } from "../interface/type";
 import {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
 } from "../customHooksRQ/Category";
+import { CategoryDrawerProps, ICategory } from "../interface/type";
 import { newCategory } from "../pages/Category";
 import toast from "react-hot-toast";
 
@@ -38,7 +38,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
   var categoryCreateMutation = useCreateCategoryMutation();
   var categoryUpdateMutation = useUpdateCategoryMutation();
 
-  const [category, setCategory] = useState<ICategory>(newCategory);
+  // const [category, setCategory] = useState<ICategory>(newCategory);
   const [selectedCategoryImage, setSelectedCategoryImage] = useState<
     string | null
   >(null);
@@ -51,23 +51,14 @@ function CategoryDrawer(props: CategoryDrawerProps) {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<ICategory>({
     resolver: yupResolver(schema) as any,
     mode: "all",
-    defaultValues: {
-      name: selectedCategory?.name || "",
-      description: selectedCategory?.description || "",
-    },
+    defaultValues: newCategory,
   });
 
   const filePosterRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (selectedCategory && selectedCategory._id) {
-      setCategory({ ...selectedCategory });
-      setSelectedCategoryImage(selectedCategory.image ?? null);
-    }
-  }, [selectedCategory]);
 
   const handleUploadButtonClick = () => {
     if (filePosterRef.current) {
@@ -134,31 +125,34 @@ function CategoryDrawer(props: CategoryDrawerProps) {
   const handleSaveCategory = async (data: ICategory) => {
     const formData = new FormData(formRef.current!);
 
+    for (let entry of formData.entries()) {
+      console.log(entry);
+    }
+
     if (
       newCategoryImageFile &&
       newCategoryImageFile.size > 0 &&
-      newCategoryImageFile.name !== ""
+      newCategoryImageFile.name != ""
     ) {
-      // Append the image file
       formData.append("image", newCategoryImageFile);
-      formData.append("categoryRemoveImage", category.image!);
     }
 
     if (!selectedCategory?._id) {
+      console.log(selectedCategory?._id);
+
       categoryCreateMutation.mutate(
         {
-          ...formData,
           name: data.name,
           description: data.description,
-          image:data.image 
+          image: data.image,
         },
         {
           onSuccess: () => {
             handleDrawerClose();
             resetForm();
           },
-          onError: (error: any) => {
-            toast.error(error.response.data.message);
+          onError: () => {
+            toast.error("id required");
           },
         }
       );
@@ -168,7 +162,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
           _id: selectedCategory?._id,
           name: data.name,
           description: data.description,
-          // image: data.image,
+          image: data.image,
         },
         {
           onSuccess: () => {
@@ -183,15 +177,24 @@ function CategoryDrawer(props: CategoryDrawerProps) {
     }
   };
 
+  useEffect(() => {
+    if (selectedCategory && selectedCategory._id) {
+      setSelectedCategoryImage(selectedCategory.image ?? null);
+      setValue("name", selectedCategory.name, { shouldValidate: true });
+      setValue("description", selectedCategory.description, {
+        shouldValidate: true,
+      });
+    }
+  }, [selectedCategory]);
+
   const resetForm = () => {
-    setCategory({ ...newCategory });
     setSelectedCategoryImage(null);
     setNewCategoryImageFile(null);
     reset({ ...newCategory });
   };
 
   const drawer = (
-    <Box sx={{ width: "350px" }}>
+    <Box sx={{ width: "400px" }}>
       <Grid container>
         <Grid
           item
@@ -237,29 +240,22 @@ function CategoryDrawer(props: CategoryDrawerProps) {
               fullWidth
               autoComplete="new"
               required
-            ></TextField>
+            ></TextField>{" "}
           </Box>
           <Box py={1}>
             <Typography variant="subtitle1">Description</Typography>
             <TextField
               id="outlined-multiline-flexible"
-              variant="outlined"
               multiline
-              rows={4}
-              fullWidth
+              minRows={5}
               {...register("description")}
-              autoComplete="new"
-              required
               error={!!errors.description}
               helperText={errors.description?.message?.toString()}
-              inputProps={{
-                style: {
-                  minHeight: "10px", // Adjust the minimum height of the textarea
-                },
-              }}
+              fullWidth
               FormHelperTextProps={{
                 sx: { color: "red", marginLeft: "0px" },
               }}
+              autoComplete="new"
             />
           </Box>
           <Box
@@ -272,14 +268,9 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             }}
           >
             <Typography variant="body1" fontWeight="bold">
-              Collection Image
+              Category Image
             </Typography>
-            <Button
-              variant="outlined"
-              onClick={handleUploadButtonClick}
-              sx={{ textTransform: "none" }}
-              size="small"
-            >
+            <Button variant="outlined" onClick={handleUploadButtonClick}>
               <AddIcon />
               Upload Image
             </Button>
@@ -298,28 +289,15 @@ function CategoryDrawer(props: CategoryDrawerProps) {
               onChange={handleCategoryImageUpload}
             />
 
-            {selectedCategoryImage != null && selectedCategory ? (
+            {selectedCategoryImage != null && (
               <img
-                src={
-                  `http://localhost:3000/category/images/${selectedCategoryImage} ` ||
-                  selectedCategoryImage
-                }
+                src={selectedCategoryImage}
                 style={{
                   width: "100px",
                   height: "100px",
                 }}
-                alt="Selected Category Image"
               />
-            ) : newCategoryImageFile != null ? (
-              <img
-                src={URL.createObjectURL(newCategoryImageFile)}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                }}
-                alt="Uploaded Image"
-              />
-            ) : null}
+            )}
           </Box>
         </Grid>
       </Grid>
@@ -338,7 +316,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
         position: "relative",
         "& .MuiDrawer-paper": {
           boxSizing: "border-box",
-          width: "350px",
+          width: "400px",
         },
       }}
     >
@@ -371,7 +349,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="contained" sx={{ color: "white" }}>
+            <Button type="submit" variant="contained">
               Save
             </Button>
           </Box>
