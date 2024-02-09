@@ -6,7 +6,7 @@ export interface ICategory {
     _id?: string,
     name: string,
     description: string,
-    image?: string
+    image: string
 }
 
 export interface IUser {
@@ -14,26 +14,29 @@ export interface IUser {
     password: string
 }
 export type CategoryDrawerProps = {
-    isDrawerOpen: boolean;
-    selectedCategory: ICategory | null;
-    handleDrawerClose: () => void;
-}
+  isDrawerOpen: boolean;
+  selectedCategory: ICategory | null;
+  handleDrawerClose: () => void;
+  isFetching: boolean;
+};
 export type JewelleryItemDrawerProps = {
     isDrawerOpen: boolean;
     selectedJewelleryITem: IProduct | null;
     handleDrawerClose: () => void;
 }
 
-export type IProduct = {
-    _id?: string,
-    title: string,
-    images: string[],
-    price: number,
-    description: string,
-    netWeight: number,
-    posterURL: string,
-    JewelleryCollection: ICategory[]
+  export interface IProduct {
+  _id: string;
+  title: string;
+  images: string[];
+  price: number;
+  description: string;
+  netWeight: number;
+  posterURL: string;
+  JewelleryCollection: any[];
+  collection: string; // Add the 'collection' property
 }
+
 
 export type DialogProps = {
     deleteDialogConfirmationOpen: boolean;

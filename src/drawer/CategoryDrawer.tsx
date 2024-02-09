@@ -25,6 +25,7 @@ const schema = yup.object().shape({
     .min(5, "Name should be min 5 characters")
     .required("Please enter the name"),
   description: yup.string(),
+  // image: yup.mixed().required("Menu image is required"),
 });
 
 function CategoryDrawer(props: CategoryDrawerProps) {
@@ -32,6 +33,7 @@ function CategoryDrawer(props: CategoryDrawerProps) {
     isDrawerOpen: categoryDrawerOpen,
     handleDrawerClose,
     selectedCategory,
+
   } = props;
   const formRef = useRef(null);
 
@@ -132,7 +134,9 @@ function CategoryDrawer(props: CategoryDrawerProps) {
   };
 
   const handleSaveCategory = async (data: ICategory) => {
-    const formData = new FormData(formRef.current!);
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
 
     if (
       newCategoryImageFile &&
@@ -145,43 +149,29 @@ function CategoryDrawer(props: CategoryDrawerProps) {
     }
 
     if (!selectedCategory?._id) {
-      categoryCreateMutation.mutate(
-        {
-          ...formData,
-          name: data.name,
-          description: data.description,
-          image:data.image 
+      categoryCreateMutation.mutate (formData, {
+        onSuccess: () => {
+          handleDrawerClose();
+          resetForm();
         },
-        {
-          onSuccess: () => {
-            handleDrawerClose();
-            resetForm();
-          },
-          onError: (error: any) => {
-            toast.error(error.response.data.message);
-          },
-        }
-      );
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
     } else {
-      categoryUpdateMutation.mutate(
-        {
-          _id: selectedCategory?._id,
-          name: data.name,
-          description: data.description,
-          // image: data.image,
+      formData.append("_id", selectedCategory?._id); 
+      categoryUpdateMutation.mutate(formData, {
+        onSuccess: () => {
+          handleDrawerClose();
+          resetForm();
         },
-        {
-          onSuccess: () => {
-            handleDrawerClose();
-            resetForm();
-          },
-          onError: (error: any) => {
-            toast.error(error.response.data.message);
-          },
-        }
-      );
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
     }
   };
+
 
   const resetForm = () => {
     setCategory({ ...newCategory });
@@ -295,24 +285,25 @@ function CategoryDrawer(props: CategoryDrawerProps) {
               type="file"
               style={{ display: "none" }}
               ref={filePosterRef}
+              name="image"
               onChange={handleCategoryImageUpload}
             />
 
-            {selectedCategoryImage != null && selectedCategory ? (
+            {selectedCategoryImage ? (
               <img
                 src={
                   `http://localhost:3000/category/images/${selectedCategoryImage} ` ||
                   selectedCategoryImage
-                }
+                } 
                 style={{
                   width: "100px",
                   height: "100px",
                 }}
                 alt="Selected Category Image"
               />
-            ) : newCategoryImageFile != null ? (
+            ) : newCategoryImageFile ? (
               <img
-                src={URL.createObjectURL(newCategoryImageFile)}
+                src={URL.createObjectURL(newCategoryImageFile)} // Using URL.createObjectURL for newly uploaded image
                 style={{
                   width: "100px",
                   height: "100px",

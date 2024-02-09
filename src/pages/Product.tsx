@@ -30,6 +30,7 @@ import { useGetAllCategory } from "../customHooksRQ/Category";
 import JewelleryItem from "../drawer/JewelleryItem";
 
 const newProduct: IProduct = {
+  _id: "",
   title: "",
   images: [],
   price: 0,
@@ -37,11 +38,12 @@ const newProduct: IProduct = {
   netWeight: 0,
   posterURL: "",
   JewelleryCollection: [],
+  collection: "",
 };
 
 const Product = () => {
   const deleteProductMutation = useDeleteProductMutation();
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+const [productdialogOpen, setProductDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [deleteDialogConfirmationOpen, setDeleteDialogConfirmationOpen] =
     useState(false);
@@ -68,18 +70,6 @@ const Product = () => {
     const fetchData = async () => {
       try {
         setLoadingProducts(true);
-        const updatedProduct: IProduct = {
-          _id: "", // Set the appropriate _id for the selected product
-          title: "",
-          images: [],
-          price: 0,
-          description: "",
-          netWeight: 0,
-          posterURL: "",
-          JewelleryCollection: [], // Set the selected collection
-        };
-        console.log(selectedCollection);
-
         if (selectedCollection) {
           const result = await FetchJewelleryItemByJewelleryCollection(
             selectedCollection
@@ -97,7 +87,6 @@ const Product = () => {
       fetchData();
     }
   }, [selectedCollection]);
-  console.log(filteredProducts);
 
   const handleCollectionChange = (
     event: SelectChangeEvent<string>,
@@ -111,14 +100,10 @@ const Product = () => {
 
   const handleProductEditClick = (product: IProduct) => {
     setSelectedProduct(product);
-    setIsDrawerOpen(true);
+setProductDialogOpen(true);
   };
 
-  const handleProductAddClick = () => {
-    setSelectedProduct(newProduct);
-    setIsDrawerOpen(true);
-    refetch();
-  };
+ 
 
   const handleProductDeleteClick = (product: IProduct) => {
     setDeleteConfirmation(product);
@@ -141,9 +126,22 @@ const Product = () => {
     }
   };
 
+  const handleProductEdit = (updatedProduct: IProduct) => {
+    // Update the product in the table
+    const updatedProducts = filteredProducts.map((product) =>
+      product._id === updatedProduct._id ? updatedProduct : product
+    );
+    setFilteredProducts(updatedProducts);
+    // Close the dialog
+    setProductDialogOpen(false);
+    // Show success message
+    // updat(true, "Product updated successfully.", "success");
+  };
+
+
   const handleAddProductClick = () => {
     setSelectedProduct(newProduct);
-    setIsDrawerOpen(true);
+  setProductDialogOpen(true);
     refetch();
   };
 
@@ -317,11 +315,12 @@ const Product = () => {
               handleDeleteClickConfirm={handleDeleteConfirmClick}
             />
           )}
-          {isDrawerOpen && (
+          {productdialogOpen && selectedProduct && (
             <JewelleryItem
-              isDrawerOpen={isDrawerOpen}
-              handleDrawerClose={() => setIsDrawerOpen(false)}
-              selectedJewelleryITem={selectedProduct}
+              selectedProduct={selectedProduct}
+              dialogOpen={productdialogOpen}
+              onCloseDialog={() => setProductDialogOpen(false)}
+              onProductEdit={handleProductEdit}
             />
           )}
         </>

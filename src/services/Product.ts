@@ -8,7 +8,7 @@ export const getAllProduct = async () => {
     } catch (error) { throw error }
 };
 
-export const createProduct = async (newProduct: IProduct) => {
+export const createProduct = async (newProduct: FormData) => {
 
     try {
         const response = await http.post<IProduct>(
@@ -25,24 +25,37 @@ export const createProduct = async (newProduct: IProduct) => {
     }
 };
 
-export const updateProduct = async (updatedProduct: IProduct) => {
+export const updateProduct = async (updatedProduct: FormData) => {
     console.log("api update", updatedProduct);
 
-    const updateApi = `JewelleryItem/updateJewelleryItem/${updatedProduct._id}`;
-    try {
-        const response = await http.put(updateApi, updatedProduct);
-        console.log(response);
+    // const updateApi = `JewelleryItem/updateJewelleryItem/${updatedProduct._id}`;
+    // try {
+    //     const response = await http.put<IProduct>(updateApi, updatedProduct);
+    //     console.log(response);
 
-        if (response.data && response.data._id) {
+    //     if (response.data && response.data._id) {
 
-            return response.data;
-        } else {
-            throw new Error("Error while update Product");
-        }
-    } catch (error) {
-        console.error("Error in update  Product:", error);
-        throw error;
-    }
+    //         return response.data;
+    //     } else {
+    //         throw new Error("Error while update Product");
+    //     }
+    // } catch (error) {
+    //     console.error("Error in update  Product:", error);
+    //     throw error;
+    // }
+try {
+  var id = updatedProduct.get("id");
+  var response = await http.put<IProduct>(
+    `JewelleryItem/updateJewelleryItem/${id}`,
+    updatedProduct
+  );
+  return response.data;
+} catch (error) {
+  throw error;
+}
+
+
+
 };
 
 export const deleteProduct = async (id: string) => {
