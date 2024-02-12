@@ -1,17 +1,17 @@
 export interface ILogin {
-    phoneNumber: string,
-    password: string
+  phoneNumber: string;
+  password: string;
 }
 export interface ICategory {
-    _id?: string,
-    name: string,
-    description: string,
-    image: string
+  _id?: string;
+  name: string;
+  description: string;
+  image: string;
 }
 
 export interface IUser {
-    phoneNumber: string,
-    password: string
+  phoneNumber: string;
+  password: string;
 }
 export type CategoryDrawerProps = {
   isDrawerOpen: boolean;
@@ -20,12 +20,13 @@ export type CategoryDrawerProps = {
   isFetching: boolean;
 };
 export type JewelleryItemDrawerProps = {
-    isDrawerOpen: boolean;
-    selectedJewelleryITem: IProduct | null;
-    handleDrawerClose: () => void;
-}
+  isDrawerOpen: boolean;
+  selectedJewelleryITem: IProduct | null;
+  handleDrawerClose: () => void;
+};
 
-  export interface IProduct {
+export interface IProduct {
+ 
   _id: string;
   title: string;
   images: string[];
@@ -33,13 +34,24 @@ export type JewelleryItemDrawerProps = {
   description: string;
   netWeight: number;
   posterURL: string;
-  JewelleryCollection: any[];
-  collection: string; // Add the 'collection' property
+  JewelleryCollection: ICategory[];
 }
 
-
 export type DialogProps = {
-    deleteDialogConfirmationOpen: boolean;
-    handleDeleteCancel: () => void;
-    handleDeleteClickConfirm: () => void;
+  deleteDialogConfirmationOpen: boolean;
+  handleDeleteCancel: () => void;
+  handleDeleteClickConfirm: () => void;
+};
+
+export type ProductByCollection = {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  netWeight: number;
+  posterURL: string;
+  categoryName: string;
+  JewelleryCollectionId: string[];
+  images: string[];
+  JewelleryCollection: ICategory[];
 };
