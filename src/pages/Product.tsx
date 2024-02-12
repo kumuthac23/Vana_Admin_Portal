@@ -25,7 +25,7 @@ import { IProduct } from "../interface/type";
 import { useDeleteProductMutation } from "../customHooksRQ/Product";
 import { FetchJewelleryItemByJewelleryCollection } from "../services/Product";
 import DeleteConfirmationDialogBox from "../common/DeleteConfirmationDialogBox";
-import Loader from "../common/Loader";
+// import Loader from "../common/Loader";
 import { useGetAllCategory } from "../customHooksRQ/Category";
 import JewelleryItem from "../drawer/JewelleryItem";
 
@@ -53,7 +53,7 @@ const Product = () => {
   );
   const [searchText, setSearchText] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
+  // const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   const {
     data: CollectionData,
@@ -67,7 +67,7 @@ const Product = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoadingProducts(true);
+        // setLoadingProducts(true);
         const updatedProduct: IProduct = {
           _id: "", // Set the appropriate _id for the selected product
           title: "",
@@ -89,7 +89,7 @@ const Product = () => {
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        setLoadingProducts(false);
+        // setLoadingProducts(false);
       }
     };
 
@@ -155,9 +155,9 @@ const Product = () => {
 
   return (
     <>
-      {isLoading || isFetching || loadingProducts ? (
+      {/* {isLoading || isFetching || loadingProducts ? (
         <Loader />
-      ) : (
+      ) : ( */}
         <>
           <Container>
             <Box
@@ -325,7 +325,7 @@ const Product = () => {
             />
           )}
         </>
-      )}
+      {/* )}  */}
     </>
   );
 };

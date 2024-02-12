@@ -1,9 +1,11 @@
 import { IUser } from "../interface/type";
-import { userhttp } from "./http";
+import {
+  httpWithoutCredentials,
+  } from "../services/http";
 
 export const getLoginCridential = async (data: IUser) => {
     try {
-        const response = await userhttp.post<IUser[]>("user/login", data);
+        const response = await httpWithoutCredentials.post<IUser[]>("user/login", data);
         console.log(response);
 
         return response;

@@ -1,9 +1,12 @@
 import { IProduct } from "../interface/type";
-import { http } from "./http";
+import {
+  httpWithoutCredentials,
+  httpWithMultipartFormData,
+} from "../services/http";
 
 export const getAllProduct = async () => {
     try {
-        const response = await http.get<IProduct[]>("JewelleryItem/getAllJewelleryItem");
+        const response = await httpWithoutCredentials.get<IProduct[]>("JewelleryItem/getAllJewelleryItem");
         return response.data;
     } catch (error) { throw error }
 };
@@ -11,7 +14,7 @@ export const getAllProduct = async () => {
 export const createProduct = async (newProduct: IProduct) => {
 
     try {
-        const response = await http.post<IProduct>(
+        const response = await httpWithoutCredentials.post<IProduct>(
             "JewelleryItem/createJewelleryItem",
             newProduct
         );
@@ -30,7 +33,7 @@ export const updateProduct = async (updatedProduct: IProduct) => {
 
     const updateApi = `JewelleryItem/updateJewelleryItem/${updatedProduct._id}`;
     try {
-        const response = await http.put(updateApi, updatedProduct);
+        const response = await httpWithMultipartFormData.put(updateApi, updatedProduct);
         console.log(response);
 
         if (response.data && response.data._id) {
@@ -48,7 +51,7 @@ export const updateProduct = async (updatedProduct: IProduct) => {
 export const deleteProduct = async (id: string) => {
     const deleteApi = `JewelleryItem/deleteJewelleryItem/${id}`;
     try {
-        await http.delete(deleteApi);
+        await httpWithoutCredentials.delete(deleteApi);
         console.log("Product deleted successfully");
     } catch (error) {
         console.error("Error in delete Product:", error);
@@ -60,7 +63,7 @@ export const FetchJewelleryItemByJewelleryCollection = async (updatedProduct: st
     try {
         console.log(updatedProduct);
 
-        const response = await http.get<IProduct[]>(`JewelleryItem/fetchJewelleryItemsByJewelleryCollectionId/${updatedProduct}`);
+        const response = await httpWithoutCredentials.get<IProduct[]>(`JewelleryItem/fetchJewelleryItemsByJewelleryCollectionId/${updatedProduct}`);
         console.log(response.data);
 
         return response.data;

@@ -20,7 +20,7 @@ import {
   useGetAllCategory,
 } from "../customHooksRQ/Category";
 import CategoryDrawer from "../drawer/CategoryDrawer";
-import Loader from "../common/Loader";
+// import Loader from "../common/Loader";
 import DeleteConfirmationDialogBox from "../common/DeleteConfirmationDialogBox";
 
 export const newCategory: ICategory = {
@@ -43,8 +43,8 @@ const Category = () => {
 
   const {
     data: CategoryData,
-    isLoading,
-    isFetching,
+    // isLoading,
+    // isFetching,
     refetch,
   } = useGetAllCategory();
 
@@ -84,9 +84,9 @@ const Category = () => {
 
   return (
     <>
-      {isLoading || isFetching ? (
+      {/* {isLoading || isFetching ? (
         <Loader />
-      ) : (
+      ) : ( */}
         <>
           <Container>
             <Box display="flex" justifyContent="space-between">
@@ -182,7 +182,7 @@ const Category = () => {
             />
           )}
         </>
-      )}
+      {/* )} */}
     </>
   );
 };
