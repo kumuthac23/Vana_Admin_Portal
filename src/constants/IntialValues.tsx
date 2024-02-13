@@ -5,7 +5,7 @@ export const ProductInitialValue: IProduct = {
   title: "",
   description: "",
   price: 0, 
-  netWeight: 0, 
+  // netWeight?: 0, 
   posterURL: "",
   JewelleryCollection: [], 
   images: [],

@@ -26,15 +26,14 @@ export type JewelleryItemDrawerProps = {
 };
 
 export interface IProduct {
- 
   _id: string;
   title: string;
   images: string[];
   price: number;
   description: string;
-  netWeight: number;
+  netWeight?: number;
   posterURL: string;
-  JewelleryCollection: ICategory[];
+  JewelleryCollection: (string | undefined)[];
 }
 
 export type DialogProps = {
