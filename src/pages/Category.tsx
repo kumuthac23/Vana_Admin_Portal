@@ -20,7 +20,6 @@ import {
   useGetAllCategory,
 } from "../customHooksRQ/Category";
 import CategoryDrawer from "../drawer/CategoryDrawer";
-import Loader from "../common/Loader";
 import DeleteConfirmationDialogBox from "../common/DeleteConfirmationDialogBox";
 
 export const newCategory: ICategory = {
@@ -43,8 +42,6 @@ const Category = () => {
 
   const {
     data: CategoryData,
-    isLoading,
-    isFetching,
     refetch,
   } = useGetAllCategory();
 
@@ -84,105 +81,102 @@ const Category = () => {
 
   return (
     <>
-      {isLoading || isFetching ? (
-        <Loader />
-      ) : (
-        <>
-          <Container>
-            <Box display="flex" justifyContent="space-between">
-              <Box display={"flex"} alignItems={"center"} columnGap={1}>
-                <Typography variant="h6">Collections</Typography>
-                <Typography>({Categorys.length})</Typography>
-              </Box>
-              <Button
-                variant="contained"
-                sx={{ textTransform: "none", color: "white" }}
-                onClick={handleCategoryAddClick}
-              >
-                + Add Collection
-              </Button>
+
+      <>
+        <Container>
+          <Box display="flex" justifyContent="space-between">
+            <Box display={"flex"} alignItems={"center"} columnGap={1}>
+              <Typography variant="h6">Collections</Typography>
+              <Typography>({Categorys.length})</Typography>
             </Box>
-            <TableContainer
+            <Button
+              variant="contained"
+              sx={{ textTransform: "none", color: "white" }}
+              onClick={handleCategoryAddClick}
+            >
+              + Add Collection
+            </Button>
+          </Box>
+          <TableContainer
+            sx={{
+              maxHeight: 600,
+              height: "100%",
+              marginTop: 3,
+              position: "relative",
+              lineheight: "none",
+              overflowY: "auto",
+            }}
+          >
+            <Table
               sx={{
-                maxHeight: 600,
-                height: "100%",
-                marginTop: 3,
-                position: "relative",
-                lineheight: "none",
-                overflowY: "auto",
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+                tableLayout: "fixed",
               }}
             >
-              <Table
+              <TableHead
                 sx={{
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 1,
-                  tableLayout: "fixed",
+                  backgroundColor: "wheat",
+                  height: selectedCategory ? "50px" : "auto",
                 }}
               >
-                <TableHead
-                  sx={{
-                    backgroundColor: "wheat",
-                    height: selectedCategory ? "50px" : "auto",
-                  }}
-                >
-                  <TableRow>
-                    <TableCell align="center">Image</TableCell>
-                    <TableCell align="center">Name</TableCell>
-                    <TableCell align="center" sx={{ width: 600 }}>
-                      Description
+                <TableRow>
+                  <TableCell align="center">Image</TableCell>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center" sx={{ width: 600 }}>
+                    Description
+                  </TableCell>
+                  <TableCell align="center">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Categorys.map((category, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="center">
+                      <img
+                        width="50px"
+                        src={`http://localhost:3000/category/images/${category.image}`}
+                        alt={`${category.name}`}
+                      />
                     </TableCell>
-                    <TableCell align="center">Actions</TableCell>
+                    <TableCell align="center">{category.name}</TableCell>
+                    <TableCell align="center">
+                      {category.description}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={() => handleCategoryEditClick(category)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleCategoryDeleteClick(category)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Categorys.map((category, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="center">
-                        <img
-                          width="50px"
-                          src={`http://localhost:3000/category/images/${category.image}`}
-                          alt={`${category.name}`}
-                        />
-                      </TableCell>
-                      <TableCell align="center">{category.name}</TableCell>
-                      <TableCell align="center">
-                        {category.description}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton
-                          onClick={() => handleCategoryEditClick(category)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleCategoryDeleteClick(category)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Container>
-          {deleteDialogConfirmationOpen && (
-            <DeleteConfirmationDialogBox
-              deleteDialogConfirmationOpen={deleteDialogConfirmationOpen}
-              handleDeleteCancel={handleDeleteCancel}
-              handleDeleteClickConfirm={handleDeleteConfirmClick}
-            />
-          )}
-          {isDrawerOpen && (
-            <CategoryDrawer
-              isDrawerOpen={isDrawerOpen}
-              handleDrawerClose={() => setIsDrawerOpen(false)}
-              selectedCategory={selectedCategory}
-            />
-          )}
-        </>
-      )}
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
+        {deleteDialogConfirmationOpen && (
+          <DeleteConfirmationDialogBox
+            deleteDialogConfirmationOpen={deleteDialogConfirmationOpen}
+            handleDeleteCancel={handleDeleteCancel}
+            handleDeleteClickConfirm={handleDeleteConfirmClick}
+          />
+        )}
+        {isDrawerOpen && (
+          <CategoryDrawer
+            isDrawerOpen={isDrawerOpen}
+            handleDrawerClose={() => setIsDrawerOpen(false)}
+            selectedCategory={selectedCategory}
+          />
+        )}
+      </>
     </>
   );
 };

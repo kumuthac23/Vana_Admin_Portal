@@ -1,9 +1,12 @@
 import { ICategory } from "../interface/type";
-import { http } from "./http";
+import {
+  httpWithoutCredentials,
+  httpWithMultipartFormData,
+  } from "../services/http";
 
 export const getAllCategory = async () => {
     try {
-        const response = await http.get<ICategory[]>("JewelleryCollection/getJewelleryCollection");
+        const response = await httpWithoutCredentials.get<ICategory[]>("JewelleryCollection/getJewelleryCollection");
         return response.data;
     } catch (error) { throw error }
 };
@@ -12,7 +15,7 @@ export const createCategory = async (newCategory: ICategory) => {
     console.log("create", newCategory);
 
     try {
-        const response = await http.post<ICategory>(
+        const response = await httpWithoutCredentials.post<ICategory>(
             "JewelleryCollection/validateAndCreateJewelleryCollection",
             newCategory
         );
@@ -31,7 +34,7 @@ export const updateCategory = async (updatedCategory: ICategory) => {
 
     const updateApi = `JewelleryCollection/updateJewelleryCollection/${updatedCategory._id}`;
     try {
-        const response = await http.put(updateApi, updatedCategory);
+        const response = await httpWithMultipartFormData.put(updateApi, updatedCategory);
         console.log(response);
 
         if (response.data && response.data._id) {
@@ -49,7 +52,7 @@ export const updateCategory = async (updatedCategory: ICategory) => {
 export const deleteCategory = async (id: string) => {
     const deleteApi = `JewelleryCollection/deleteJewelleryCollection/${id}`;
     try {
-        await http.delete(deleteApi);
+        await httpWithoutCredentials.delete(deleteApi);
         console.log("Category deleted successfully");
     } catch (error) {
         console.error("Error in delete Category:", error);
