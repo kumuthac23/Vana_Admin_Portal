@@ -122,6 +122,7 @@ function ProductDialog(props: IProps) {
 
   useEffect(() => {
     if (selectedProduct && selectedProduct._id) {
+      setIsEdit(true)
       setProduct({ ...selectedProduct });
       // if (selectedProduct.images && Array.isArray(selectedProduct.images)) {
       //   setNewProductUploadImages([...selectedProduct.images]);
