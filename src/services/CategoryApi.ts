@@ -8,13 +8,13 @@ export const getAllCategory = async () => {
     } catch (error) { throw error }
 };
 
-export const createCategory = async (newCategory: ICategory) => {
+export const createCategory = async (newCategory: FormData) => {
     console.log("create", newCategory);
 
     try {
         const response = await http.post<ICategory>(
-            "JewelleryCollection/validateAndCreateJewelleryCollection",
-            newCategory
+          "JewelleryCollection/createJewelleryCollection",
+          newCategory
         );
         if (response.data && response.data._id) {
             return response.data;
@@ -26,23 +26,34 @@ export const createCategory = async (newCategory: ICategory) => {
     }
 };
 
-export const updateCategory = async (updatedCategory: ICategory) => {
+export const updateCategory = async (updatedCategory: FormData) => {
     console.log("api update", updatedCategory);
 
-    const updateApi = `JewelleryCollection/updateJewelleryCollection/${updatedCategory._id}`;
+    // const updateApi = `JewelleryCollection/updateJewelleryCollection/${updatedCategory._id}`;
+    // try {
+    //     const response = await http.put(updateApi, updatedCategory);
+    //     console.log(response);
+
+    //     if (response.data && response.data._id) {
+
+    //         return response.data;
+    //     } else {
+    //         throw new Error("Error while update category");
+    //     }
+    // } catch (error) {
+    //     console.error("Error in update  Category:", error);
+    //     throw error;
+    // }
+
     try {
-        const response = await http.put(updateApi, updatedCategory);
-        console.log(response);
-
-        if (response.data && response.data._id) {
-
-            return response.data;
-        } else {
-            throw new Error("Error while update category");
-        }
+      var id = updatedCategory.get("id");
+      var response = await http.put<ICategory>(
+        `JewelleryCollection/updateJewelleryCollection/${id}`,
+        updatedCategory
+      );
+      return response.data;
     } catch (error) {
-        console.error("Error in update  Category:", error);
-        throw error;
+      throw error;
     }
 };
 

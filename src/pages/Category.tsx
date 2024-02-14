@@ -179,6 +179,7 @@ const Category = () => {
               isDrawerOpen={isDrawerOpen}
               handleDrawerClose={() => setIsDrawerOpen(false)}
               selectedCategory={selectedCategory}
+              isFetching={isFetching}
             />
           )}
         </>
