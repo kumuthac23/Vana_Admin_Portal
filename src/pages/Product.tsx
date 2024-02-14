@@ -29,8 +29,6 @@ import Loader from "../common/Loader";
 import { useGetAllCategory } from "../customHooksRQ/Category";
 import JewelleryItem from "../drawer/JewelleryItem";
 
-
-
 const Product = () => {
   const deleteProductMutation = useDeleteProductMutation();
   const [productdialogOpen, setProductDialogOpen] = useState(false);
@@ -44,9 +42,7 @@ const Product = () => {
     null
   );
   const [searchText, setSearchText] = useState<string>("");
-  const [filteredProducts, setFilteredProducts] = useState<
-    IProduct[]
-  >([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
 
   const {
@@ -67,7 +63,7 @@ const Product = () => {
     posterURL: "",
     JewelleryCollection: [],
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,10 +84,7 @@ const Product = () => {
     if (selectedCollection) {
       fetchData();
     }
-  }, [selectedCollection]); 
-
-
-
+  }, [selectedCollection]);
 
   const handleCollectionChange = (
     event: SelectChangeEvent<string>,
@@ -100,16 +93,13 @@ const Product = () => {
     const selectedValue = event.target.value;
     console.log(selectedValue);
 
-      setSelectedCollection(selectedValue);
+    setSelectedCollection(selectedValue);
   };
-
-  
 
   const handleProductEditClick = (product: IProduct) => {
     setSelectedProduct(product);
     setProductDialogOpen(true);
-  };  
-
+  };
 
   const handleProductDeleteClick = (product: IProduct) => {
     setDeleteConfirmation(product);
@@ -132,7 +122,7 @@ const Product = () => {
     }
   };
 
-  const handleProductEdit = (updatedProduct:IProduct) => {
+  const handleProductEdit = (updatedProduct: IProduct) => {
     // Update the product in the table
     const updatedProducts = filteredProducts.map((product) =>
       product._id === updatedProduct._id ? updatedProduct : product
@@ -262,7 +252,6 @@ const Product = () => {
                     <TableCell align="center" sx={{ width: 450 }}>
                       Description
                     </TableCell>
-                    <TableCell align="center">Net Weight</TableCell>
                     <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -276,24 +265,13 @@ const Product = () => {
                         </TableCell>
 
                         <TableCell align="center">
-                          {product.images &&
-                            product.images.map((image: string, i: number) => (
-                              <img
-                                key={i}
-                                src={image}
-                                alt={`Product ${index + 1} Image ${i + 1}`}
-                                style={{ marginRight: "5px" }}
-                              />
-                            ))}
+                          <img src={product.posterURL} height={70} width={70} />
                         </TableCell>
                         <TableCell align="center">
                           {product.price || null}
                         </TableCell>
                         <TableCell align="center">
                           {product.description || null}
-                        </TableCell>
-                        <TableCell align="center">
-                          {product.netWeight || null}
                         </TableCell>
                         <TableCell align="center">
                           <IconButton
